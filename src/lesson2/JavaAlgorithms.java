@@ -5,6 +5,7 @@ import kotlin.Pair;
 
 @SuppressWarnings("unused")
 public class JavaAlgorithms {
+
     /**
      * Получение наибольшей прибыли (она же -- поиск максимального подмассива)
      * Простая
@@ -96,9 +97,41 @@ public class JavaAlgorithms {
      * При сравнении подстрок, регистр символов *имеет* значение.
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
+     *
+     //T = O(n*m)
+     //R = O(n*m), где n и m длинны передаваемых строк
+     //  r t y u b n b p
+     //t 0 1 0 0 0 0 0 0
+     //u 0 0 0 1 0 0 0 0
+     //b 0 0 0 0 2 0 1 0
+     //n 0 0 0 0 0 3 0 0
+     //r 1 0 0 0 0 0 0 0
+     //i 0 0 0 0 0 0 0 0
      */
-    static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+    static public String longestCommonSubstring(String first, String second) {
+        int[][] m = new int[first.length()][second.length()];
+        int first_index = 0;
+        int last_index = -1;
+
+        for (int i = 0; i < first.length(); i++) {
+            for (int j = 0; j < second.length(); j++) {
+                if (first.charAt(i) == second.charAt(j)) {
+                    if (i == 0 || j == 0)
+                        m[i][j] = 1;
+                    else
+                        m[i][j] = m[i - 1][j - 1] + 1;
+                }
+
+                if (m[i][j] > first_index)
+                {
+                    first_index = m[i][j];
+                    last_index = i;
+                }
+            }
+        }
+        if (last_index < 0)
+            return "";
+        return first.substring(last_index + 1 - first_index, last_index + 1);
     }
 
     /**
@@ -112,6 +145,33 @@ public class JavaAlgorithms {
      * Единица простым числом не считается.
      */
     static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+        if (limit < 2)
+            return 0;
+
+        int k = limit + 1;
+        int[] m = new int[k];
+
+        int result = 0;
+        for (int i = 2; i * i < k; i++) {
+            if (m[i] == 0) {
+                for (int j = i * i; j < k; j += i) {
+                    m[j] = 1;
+                }
+            }
+        }
+//        for (int i = 2; i < k; i++) {
+//            System.out.print(i+ " ");
+//        }
+//        System.out.println();
+//        for (int i = 2; i < k; i++) {
+//            System.out.print("m[" + i + "] = " + m[i] + " ");
+//        }
+        System.out.println();
+        for (int i = 2; i < k; i++) {
+            if (m[i] == 0)
+                result++;
+        }
+//        System.out.println(result);
+        return result;
     }
 }
